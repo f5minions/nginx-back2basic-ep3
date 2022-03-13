@@ -1,0 +1,163 @@
+{
+    "policy": {
+        "name": "nap-dvwa.f5knetwork.com-pol",
+        "template": { "name": "POLICY_TEMPLATE_NGINX_BASE" },
+        "applicationLanguage": "utf-8",
+        "enforcementMode": "blocking",
+        "response-pages": [
+    {
+    "responseContent": "<html><head><title>F5 NGINX APP PROTECT Reject Page</title></head><body><center><img src=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/320px-Nginx_logo.svg.png></p>NGINX APP PROTECT!!!!! 정상적인 서비스 요청이 아닙니다. 다시 한번 확인 후 재요청을 하십시오!.<br><br>Your support ID is: <%TS.request.ID()%><br><br><a href='javascript:history.back();'>[Go Back]</a></center></body></html>",
+                "responseHeader": "HTTP/1.1 302 OK\\r\\nCache-Control: no-cache\\r\\nPragma: no-cache\\r\\nConnection: close",
+                "responseActionType": "custom",
+                "responsePageType": "default"
+            }
+        ],
+        "general": {
+                "customXffHeaders": [],
+                "trustxff": true,
+                "allowedResponseCodes": [
+                    400,
+                    401,
+                    502,
+                    499
+                ]
+        },
+        "signature-sets": [
+            {
+                "name": "All Signatures",
+                "block": true,
+                "alarm": true
+            }
+        ],
+        "blocking-settings": {
+            "violations": [
+                {
+                    "name": "VIOL_DATA_GUARD",
+                    "alarm": true,
+                    "block": false
+                },
+                {
+                    "name": "VIOL_METHOD",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_FILETYPE",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_BLACKLISTED_IP",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_HTTP_RESPONSE_STATUS",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_EVASION",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_URL",
+                    "alarm": true,
+                    "block": true
+                },
+                {
+                    "name": "VIOL_URL_METACHAR",
+                    "alarm": true,
+                    "block": true
+                }
+            ]
+        },
+        "signatures": [
+            {
+                "signatureId": 200001834,
+                "enabled": false
+            },
+            {
+                "signatureId": 200001835,
+                "enabled": false
+            },
+	    {
+		"signatureId": 200002444,
+		"enabled": false
+	    }
+        ],
+        "methods": [
+            {
+                "name": "GET"
+            },
+            {
+                "name": "POST"
+            },
+            {
+                "name": "HEAD"
+            }
+        ],
+        "urls": [
+            {
+                "method": "*",
+                "name": "/meta*",
+                "protocol": "http",
+                "type": "wildcard",
+                "metacharsOnUrlCheck": true,
+                "metacharOverrides": [
+                    {
+                        "isAllowed": true,
+                        "metachar": "0x3c"
+                    },
+                    {
+                        "isAllowed": false,
+                        "metachar": "0x28"
+                    }
+                ],
+                "wildcardOrder": 2
+            },
+            {
+                "method": "*",
+                "name": "/test*",
+                "protocol": "http",
+                "type": "wildcard",
+                "wildcardOrder": 1,
+                "attackSignaturesCheck": true,
+                "signatureOverrides": [
+                    {
+                        "enabled": true,
+                        "signatureId": 200010008
+                    }
+                ]
+            }
+        ],
+        "data-guard": {
+            "enabled": true,
+            "maskData": true,
+            "creditCardNumbers": true,
+            "usSocialSecurityNumbers": true,
+            "enforcementMode": "ignore-urls-in-list",
+            "enforcementUrls": []
+        },
+        "whitelist-ips": [
+            {
+                "blockRequests": "never",
+                "neverLogRequests": false,
+                "ipAddress": "1.1.1.1",
+                "ipMask": "255.255.255.255"
+            },
+            {
+                "blockRequests": "always",
+                "ipAddress": "1.237.188.0",
+                "ipMask": "255.255.255.0"
+            },
+            {
+                "blockRequests": "never",
+                "neverLogRequests": false,
+                "ipAddress": "3.3.3.0",
+                "ipMask": "255.255.255.0"
+            }
+        ]
+    }
+}
